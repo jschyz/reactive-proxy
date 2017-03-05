@@ -16,10 +16,10 @@ export default (state) => {
         if (event.keyCode !== 13) return;
 
         if (state.newTodo) {
-            state.todos = [...state.todos, {
+            state.todos.push({
               title: state.newTodo,
               completed: false
-            }]
+            })
             state.newTodo = ''
         }
       }
