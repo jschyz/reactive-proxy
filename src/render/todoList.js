@@ -9,7 +9,7 @@ export default (state) => {
   let elements = todos.map((todo, index) => {
     let beforeEditCache
 
-    return h('li.todo', { className: (todo.completed ? ' completed' :  '') + (state.editedTodo == todo ? ' editing' : '') }, [
+    return h('li.todo', {className: (todo.completed ? ' completed' : '') + (state.editedTodo === todo ? ' editing' : '')}, [
       // VNode: input[text]
       h('.view', [
         h('input.toggle', {
@@ -39,7 +39,7 @@ export default (state) => {
         value: todo.title,
         onkeyup (event) {
           // 完成编辑
-          if (event.keyCode == 13) {
+          if (event.keyCode === 13) {
             if (!state.editedTodo) return
 
             state.editedTodo = null
@@ -47,9 +47,8 @@ export default (state) => {
             if (!todo.title) {
               state.todos.splice(index, 1)
             }
-          }
-          // 取消编辑
-          else if (event.keyCode == 27) {
+          } else if (event.keyCode === 27) {
+            // 取消编辑
             state.editedTodo = null
             todo.title = beforeEditCache
           }

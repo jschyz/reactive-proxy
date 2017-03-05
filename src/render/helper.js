@@ -21,6 +21,6 @@ export function filterTodos (state) {
 }
 
 //
-export function display(expression) {
+export function display (expression) {
   return 'display:' + ['none', 'block'][Number(!!expression)]
 }

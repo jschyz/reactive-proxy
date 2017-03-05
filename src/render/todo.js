@@ -1,10 +1,10 @@
-import { h, diff } from 'virtual-dom'
+import { h } from 'virtual-dom'
 
 export default (state) => {
   return h('header', {}, [
     h('h1', {}, 'todos'),
     h('input.new-todo', {
-      type:'text',
+      type: 'text',
       autofocus: 'autofocus',
       autocomplete: false,
       placeholder: 'What needs to be done?',
@@ -13,14 +13,14 @@ export default (state) => {
         state.newTodo = event.target.value
       },
       onkeyup (event) {
-        if (event.keyCode !== 13) return;
+        if (event.keyCode !== 13) return
 
         if (state.newTodo) {
-            state.todos.push({
-              title: state.newTodo,
-              completed: false
-            })
-            state.newTodo = ''
+          state.todos.push({
+            title: state.newTodo,
+            completed: false
+          })
+          state.newTodo = ''
         }
       }
     })

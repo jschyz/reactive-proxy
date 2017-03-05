@@ -6,9 +6,9 @@ export default ({target, listener}) => {
     get (target, key, receiver) {
       var value = Reflect.get(target, key, receiver)
 
-      if (//!(typeof value === 'object' && !!value && value.hasOwnProperty('__ob__')) &&
+      if (// !(typeof value === 'object' && !!value && value.hasOwnProperty('__ob__')) &&
         Array.isArray(value) ||
-        Object.prototype.toString.call(value) == '[object Object]' && Object.isExtensible(value)) {
+        Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value)) {
         return Observe(value)
       }
 
@@ -23,7 +23,7 @@ export default ({target, listener}) => {
 
   const observable = Observe(target)
 
-  function Observe(target) {
+  function Observe (target) {
     // Object.defineProperty(target, '__ob__', {
     //   enumerable: false,
     //   writable: true,

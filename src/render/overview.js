@@ -29,9 +29,7 @@ export default (state) => {
     // VNode: button
     h('button.clear-completed', {
       style: display(todos.length - remaining),
-      onclick () {
-        
-      }
+      onclick () {}
     }, ['Clear completed'])
   ])
 }

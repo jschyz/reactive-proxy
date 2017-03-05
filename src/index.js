@@ -47,5 +47,5 @@ window.addEventListener('hashchange', () => {
   }
 })
 // 自执行，加载触发事件
-var event = new Event('hashchange')
+var event = new window.Event('hashchange')
 window.dispatchEvent(event)
