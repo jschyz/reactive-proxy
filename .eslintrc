@@ -1,0 +1,10 @@
+{
+  "root": true,
+  "parser": "babel-eslint",
+  "extends": "standard",
+  "rules": {
+    "no-sequences": 0,
+    "no-useless-escape": 0,
+    "no-unexpected-multiline": 0
+  }
+}
