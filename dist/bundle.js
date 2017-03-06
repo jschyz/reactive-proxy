@@ -610,13 +610,25 @@ exports.default = function (_ref) {
   var target = _ref.target,
       listener = _ref.listener;
 
+  var uid = 0;
+  var cache = {};
+
   var handler = {
     get: function get(target, key, receiver) {
       var value = Reflect.get(target, key, receiver);
 
-      if ( //!(typeof value === 'object' && !!value && value.hasOwnProperty('__ob__')) &&
-      Array.isArray(value) || Object.prototype.toString.call(value) == '[object Object]' && Object.isExtensible(value)) {
-        return Observe(value);
+      // 通过判断__esProxy__，防止重复对数据Observe
+      if (Array.isArray(value) || Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value)) {
+        var _uid = value['__esProxy__'];
+        var _cache = void 0;
+
+        if (!_uid) {
+          _cache = Observe(value);
+          cache[_cache['__esProxy__']] = _cache;
+        } else {
+          _cache = cache[_uid];
+        }
+        return _cache;
       }
 
       return value;
@@ -631,12 +643,15 @@ exports.default = function (_ref) {
   var observable = Observe(target);
 
   function Observe(target) {
-    // Object.defineProperty(target, '__ob__', {
-    //   enumerable: false,
-    //   writable: true,
-    //   configurable: true
-    // })
-    return new Proxy(target, handler);
+    // __esProxy__ 不可枚举，代理缓存
+    Object.defineProperty(target, '__esProxy__', {
+      value: ++uid,
+      enumerable: false,
+      writable: false,
+      configurable: true
+    });
+    var proxy = new Proxy(target, handler);
+    return proxy;
   }
 
   return observable;
@@ -690,10 +705,10 @@ var STORAGE_KEY = 'es6-proxy';
 
 exports.default = {
   fetch: function fetch() {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+    return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
   },
   save: function save(todos) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
   }
 };
 
@@ -739,7 +754,13 @@ exports.default = function (state) {
   // VNode: button
   (0, _virtualDom.h)('button.clear-completed', {
     style: (0, _helper.display)(todos.length - remaining),
-    onclick: function onclick() {}
+    onclick: function onclick() {
+      todos.forEach(function (todo, index) {
+        if (todo.completed) {
+          todos.splice(index, 1);
+        }
+      });
+    }
   }, ['Clear completed'])]);
 };
 
@@ -797,12 +818,26 @@ var _helper = __webpack_require__(8);
 
 exports.default = function (state) {
   // is an array
+  // based on the hash
   var todos = (0, _helper.filterTodos)(state);
 
+  // 完成编辑
+  var done = function done(todo) {
+    if (!state.editedTodo) return;
+
+    state.editedTodo = null;
+    todo.title = todo.title.trim();
+    if (!todo.title) {
+      todos.splice(index, 1);
+    }
+  };
+  // 取消编辑
+  var cancel = function cancel(todo) {
+    state.editedTodo = null;
+    todo.title = state.beforeEditCache;
+  };
   // VNode: todo list
   var elements = todos.map(function (todo, index) {
-    var beforeEditCache = void 0;
-
     return (0, _virtualDom.h)('li.todo', { className: (todo.completed ? ' completed' : '') + (state.editedTodo == todo ? ' editing' : '') }, [
     // VNode: input[text]
     (0, _virtualDom.h)('.view', [(0, _virtualDom.h)('input.toggle', {
@@ -812,41 +847,30 @@ exports.default = function (state) {
         todo.completed = event.target.checked;
       }
     }), (0, _virtualDom.h)('label', {
-      // 双击编辑editTodo(todo)
-      ondblclick: function ondblclick() {
-        beforeEditCache = todo.title;
+      // 双击编辑，并获取焦点
+      ondblclick: function ondblclick(event) {
+        state.beforeEditCache = todo.title;
         state.editedTodo = todo;
+        event.target.parentNode.nextElementSibling.focus();
       }
     }, [todo.title]), (0, _virtualDom.h)('button.destroy', {
       // 移除 todo
       onclick: function onclick() {
-        state.todos.splice(index, 1);
+        todos.splice(index, 1);
       }
     })]),
     // VNode: input.done
     (0, _virtualDom.h)('input.edit', {
       type: 'text',
       value: todo.title,
+      oninput: function oninput(event) {
+        todo.title = event.target.value;
+      },
       onkeyup: function onkeyup(event) {
-        // 完成编辑
-        if (event.keyCode == 13) {
-          if (!state.editedTodo) return;
-
-          state.editedTodo = null;
-          todo.title = todo.title.trim();
-          if (!todo.title) {
-            state.todos.splice(index, 1);
-          }
-        }
-        // 取消编辑
-        else if (event.keyCode == 27) {
-            state.editedTodo = null;
-            todo.title = beforeEditCache;
-          }
+        if (event.keyCode === 13) done(todo);else if (event.keyCode === 27) cancel(todo);
       },
       onblur: function onblur() {
-        state.editedTodo = null;
-        todo.title = beforeEditCache;
+        done(todo);
       }
     })]);
   });
@@ -2272,9 +2296,10 @@ var state = (0, _observer2.default)({
 
 var tree = (0, _render2.default)(state);
 var rootNode = (0, _virtualDom.create)(tree);
-window.state = state;
+
 // mount
 document.querySelector('#app').appendChild(rootNode);
+window.app = state;
 
 // hash 路由设置
 window.addEventListener('hashchange', function () {
@@ -2287,7 +2312,7 @@ window.addEventListener('hashchange', function () {
   }
 });
 // 自执行，加载触发事件
-var event = new Event('hashchange');
+var event = new window.Event('hashchange');
 window.dispatchEvent(event);
 
 /***/ })
