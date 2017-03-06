@@ -2,14 +2,25 @@
  * Define a reactive property on an Object
  */
 export default ({target, listener}) => {
+  var uid = 0
+  var cache = {}
+
   const handler = {
     get (target, key, receiver) {
       var value = Reflect.get(target, key, receiver)
 
-      if (// !(typeof value === 'object' && !!value && value.hasOwnProperty('__ob__')) &&
-        Array.isArray(value) ||
-        Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value)) {
-        return Observe(value)
+      // 通过判断__esProxy__，防止重复对数据Observe
+      if ((Array.isArray(value) || Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value))) {
+        let _uid = value['__esProxy__']
+        let _cache
+
+        if (!_uid) {
+          _cache = Observe(value)
+          cache[_cache['__esProxy__']] = _cache
+        } else {
+          _cache = cache[_uid]
+        }
+        return _cache
       }
 
       return value
@@ -24,12 +35,15 @@ export default ({target, listener}) => {
   const observable = Observe(target)
 
   function Observe (target) {
-    // Object.defineProperty(target, '__ob__', {
-    //   enumerable: false,
-    //   writable: true,
-    //   configurable: true
-    // })
-    return new Proxy(target, handler)
+    // __esProxy__ 不可枚举，代理缓存
+    Object.defineProperty(target, '__esProxy__', {
+      value: ++uid,
+      enumerable: false,
+      writable: false,
+      configurable: true
+    })
+    let proxy = new Proxy(target, handler)
+    return proxy
   }
 
   return observable
