@@ -177,7 +177,11 @@ function isArray(obj) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return filters; });
 /* harmony export (immutable) */ __webpack_exports__["c"] = filterTodos;
 /* harmony export (immutable) */ __webpack_exports__["b"] = display;
-// todos 过滤器, 跟 visibility 相关
+/**
+ * @name filters
+ * @description todos筛选方法集, 跟 visibility 相关
+ * @type {Object}
+ */
 var filters = {
   all: function all(todos) {
     return todos;
@@ -194,12 +198,20 @@ var filters = {
   }
 };
 
-// computed
+/**
+ * @name filterTodos
+ * @description todos筛选器
+ * @type {Array}
+ */
 function filterTodos(state) {
   return filters[state.visibility](state.todos);
 }
 
-//
+/**
+ * @name display
+ * @description 控制节点隐藏或者显示
+ * @type {String}
+ */
 function display(expression) {
   return 'display:' + ['none', 'block'][Number(!!expression)];
 }
@@ -594,7 +606,9 @@ module.exports = g;
 
 "use strict";
 /**
- * Define a reactive property on an Object
+ * @name Observer
+ * @description Define a reactive property on an Object
+ * @type {Object}
  */
 /* harmony default export */ __webpack_exports__["a"] = function (_ref) {
   var target = _ref.target,
@@ -602,38 +616,15 @@ module.exports = g;
 
   var uid = 0;
   var cache = {};
+  var observable;
 
-  var handler = {
-    get: function get(target, key, receiver) {
-      var value = Reflect.get(target, key, receiver);
-
-      // 通过判断__esProxy__，防止重复对数据Observe
-      if (Array.isArray(value) || Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value)) {
-        var _uid = value['__esProxy__'];
-        var _cache = void 0;
-
-        if (!_uid) {
-          _cache = Observe(value);
-          cache[_cache['__esProxy__']] = _cache;
-        } else {
-          _cache = cache[_uid];
-        }
-        return _cache;
-      }
-
-      return value;
-    },
-    set: function set(target, key, value, receiver) {
-      Reflect.set(target, key, value, receiver);
-      listener(observable);
-      return true;
-    }
-  };
-
-  var observable = Observe(target);
-
+  /**
+   * @name Observe
+   * @description 深度的Proxy模式
+   * @type {Object}
+   */
   function Observe(target) {
-    // __esProxy__ 不可枚举，代理缓存
+    // __esProxy__ 不可枚举，用于代理缓存指针
     Object.defineProperty(target, '__esProxy__', {
       value: ++uid,
       enumerable: false,
@@ -644,7 +635,39 @@ module.exports = g;
     return proxy;
   }
 
-  return observable;
+  var handler = {
+    get: function get(target, key, receiver) {
+      var value = Reflect.get(target, key, receiver);
+
+      // 通过判断__esProxy__，防止重复对数据Observe
+      if (Array.isArray(value) || Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value)) {
+        var _uid = void 0;
+        var _cache = void 0;
+
+        // new Proxy 缓存设置
+        _uid = value['__esProxy__'];
+
+        if (_uid) {
+          _cache = cache[_uid];
+        } else {
+          _cache = Observe(value);
+          cache[_cache['__esProxy__']] = _cache;
+        }
+
+        return _cache;
+      }
+
+      return value;
+    },
+    set: function set(target, key, value, receiver) {
+      Reflect.set(target, key, value, receiver);
+      // 触发监听
+      listener(observable);
+      return true;
+    }
+  };
+
+  return observable = Observe(target);
 };
 
 /***/ }),
@@ -676,6 +699,11 @@ module.exports = g;
 // localStorage 存储 todos
 var STORAGE_KEY = 'es6-proxy';
 
+/**
+ * @name storage
+ * @description 本地存储 todos
+ * @type {Object}
+ */
 /* harmony default export */ __webpack_exports__["a"] = {
   fetch: function fetch() {
     return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
@@ -696,6 +724,12 @@ var STORAGE_KEY = 'es6-proxy';
 
 
 
+/**
+ * @name overview
+ * @description UI Component: todo 概览
+ * @action 任务筛选 清除已完成任务
+ * @type {Function}
+ */
 /* harmony default export */ __webpack_exports__["a"] = function (state) {
   var todos = state.todos;
   // computed: 为选中个数
@@ -740,6 +774,12 @@ var STORAGE_KEY = 'es6-proxy';
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__);
 
 
+/**
+ * @name todo
+ * @description UI Component: new todo
+ * @action 添加新任务
+ * @type {Function}
+ */
 /* harmony default export */ __webpack_exports__["a"] = function (state) {
   return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('header', {}, [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('h1', {}, 'todos'), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.new-todo', {
     type: 'text',
@@ -748,9 +788,10 @@ var STORAGE_KEY = 'es6-proxy';
     placeholder: 'What needs to be done?',
     value: state.newTodo,
     oninput: function oninput(event) {
-      state.newTodo = event.target.value;
+      return state.newTodo = event.target.value;
     },
     onkeyup: function onkeyup(event) {
+      // 回车添加任务
       if (event.keyCode !== 13) return;
 
       if (state.newTodo) {
@@ -775,13 +816,23 @@ var STORAGE_KEY = 'es6-proxy';
 
 
 
+/**
+ * @name todoList
+ * @description UI Component: todo list
+ * @action 完成任务 双击编辑任务 删除任务
+ * @type {Function}
+ */
 /* harmony default export */ __webpack_exports__["a"] = function (state) {
   // is an array
   // based on the hash
   var todos = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helper__["c" /* filterTodos */])(state);
 
-  // 完成编辑
-  var done = function done(todo) {
+  /**
+   * @name done
+   * @description 完成任务编辑工作
+   * @type {Function}
+   */
+  function done(todo, index) {
     if (!state.editedTodo) return;
 
     state.editedTodo = null;
@@ -789,32 +840,37 @@ var STORAGE_KEY = 'es6-proxy';
     if (!todo.title) {
       todos.splice(index, 1);
     }
-  };
-  // 取消编辑
-  var cancel = function cancel(todo) {
+  }
+  /**
+   * @name cancel
+   * @description 取消任务编辑工作
+   * @type {Function}
+   */
+  function cancel(todo) {
     state.editedTodo = null;
     todo.title = state.beforeEditCache;
-  };
-  // VNode: todo list
+  }
+  // VNode: <li v-for=""></li>
   var elements = todos.map(function (todo, index) {
-    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('li.todo', { className: (todo.completed ? ' completed' : '') + (state.editedTodo == todo ? ' editing' : '') }, [
+    // ClassList: [completed, editing]
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('li.todo', { className: (todo.completed ? ' completed' : '') + (state.editedTodo === todo ? ' editing' : '') }, [
     // VNode: input[text]
     __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('.view', [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.toggle', {
       type: 'checkbox',
       checked: todo.completed,
       onclick: function onclick(event) {
-        todo.completed = event.target.checked;
+        return todo.completed = event.target.checked;
       }
     }), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('label', {
-      // 双击编辑，并获取焦点
       ondblclick: function ondblclick(event) {
+        // 双击编辑，并获取焦点
         state.beforeEditCache = todo.title;
         state.editedTodo = todo;
         event.target.parentNode.nextElementSibling.focus();
       }
     }, [todo.title]), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('button.destroy', {
-      // 移除 todo
       onclick: function onclick() {
+        // 移除 todo
         todos.splice(index, 1);
       }
     })]),
@@ -823,13 +879,14 @@ var STORAGE_KEY = 'es6-proxy';
       type: 'text',
       value: todo.title,
       oninput: function oninput(event) {
-        todo.title = event.target.value;
+        return todo.title = event.target.value;
       },
       onkeyup: function onkeyup(event) {
-        if (event.keyCode === 13) done(todo);else if (event.keyCode === 27) cancel(todo);
+        if (event.keyCode === 13) done(todo, index);else if (event.keyCode === 27) cancel(todo);
       },
+
       onblur: function onblur() {
-        done(todo);
+        return done(todo, index);
       }
     })]);
   });
@@ -839,8 +896,8 @@ var STORAGE_KEY = 'es6-proxy';
   __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.toggle-all', {
     type: 'checkbox',
     onclick: function onclick(event) {
-      todos.forEach(function (todo) {
-        todo.completed = event.target.checked;
+      return todos.forEach(function (todo) {
+        return todo.completed = event.target.checked;
       });
     }
   }),
