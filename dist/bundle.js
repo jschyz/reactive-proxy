@@ -171,18 +171,14 @@ function isArray(obj) {
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.filterTodos = filterTodos;
-exports.display = display;
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return filters; });
+/* harmony export (immutable) */ __webpack_exports__["c"] = filterTodos;
+/* harmony export (immutable) */ __webpack_exports__["b"] = display;
 // todos 过滤器, 跟 visibility 相关
-var filters = exports.filters = {
+var filters = {
   all: function all(todos) {
     return todos;
   },
@@ -594,19 +590,13 @@ module.exports = g;
 
 /***/ }),
 /* 18 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
 /**
  * Define a reactive property on an Object
  */
-exports.default = function (_ref) {
+/* harmony default export */ __webpack_exports__["a"] = function (_ref) {
   var target = _ref.target,
       listener = _ref.listener;
 
@@ -659,51 +649,34 @@ exports.default = function (_ref) {
 
 /***/ }),
 /* 19 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__todo__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__todoList__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__overview__ = __webpack_require__(21);
 
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _virtualDom = __webpack_require__(1);
-
-var _todo = __webpack_require__(22);
-
-var _todo2 = _interopRequireDefault(_todo);
-
-var _todoList = __webpack_require__(23);
-
-var _todoList2 = _interopRequireDefault(_todoList);
-
-var _overview = __webpack_require__(21);
-
-var _overview2 = _interopRequireDefault(_overview);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (state) {
-  return (0, _virtualDom.h)('.todoapp', [(0, _todo2.default)(state), (0, _todoList2.default)(state), (0, _overview2.default)(state)]);
-};
 
 // VNode:ui component
 
+
+
+
+/* harmony default export */ __webpack_exports__["a"] = function (state) {
+  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('.todoapp', [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__todo__["a" /* default */])(state), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__todoList__["a" /* default */])(state), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_3__overview__["a" /* default */])(state)]);
+};
+
 /***/ }),
 /* 20 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 // localStorage 存储 todos
 var STORAGE_KEY = 'es6-proxy';
 
-exports.default = {
+/* harmony default export */ __webpack_exports__["a"] = {
   fetch: function fetch() {
     return JSON.parse(window.localStorage.getItem(STORAGE_KEY) || '[]');
   },
@@ -714,20 +687,16 @@ exports.default = {
 
 /***/ }),
 /* 21 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helper__ = __webpack_require__(8);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _virtualDom = __webpack_require__(1);
-
-var _helper = __webpack_require__(8);
-
-exports.default = function (state) {
+/* harmony default export */ __webpack_exports__["a"] = function (state) {
   var todos = state.todos;
   // computed: 为选中个数
   var remaining = todos.filter(function (todo) {
@@ -735,8 +704,8 @@ exports.default = function (state) {
   }).length;
 
   // VNode: ul.filters
-  var elements = Object.keys(_helper.filters).map(function (key) {
-    return (0, _virtualDom.h)('li', [(0, _virtualDom.h)('a', {
+  var elements = Object.keys(__WEBPACK_IMPORTED_MODULE_1__helper__["a" /* filters */]).map(function (key) {
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('li', [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('a', {
       href: '#/' + key,
       className: state.visibility === key ? 'selected' : ''
     },
@@ -746,19 +715,17 @@ exports.default = function (state) {
     })])]);
   });
 
-  return (0, _virtualDom.h)('footer.footer', { style: (0, _helper.display)(todos.length) }, [
+  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('footer.footer', { style: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helper__["b" /* display */])(todos.length) }, [
   // VNode: span
-  (0, _virtualDom.h)('span.todo-count', [(0, _virtualDom.h)('strong', [remaining]), (remaining === 1 ? ' item' : ' items') + ' left']),
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('span.todo-count', [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('strong', [remaining]), (remaining === 1 ? ' item' : ' items') + ' left']),
   // VNode: ul
-  (0, _virtualDom.h)('ul.filters', elements),
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('ul.filters', elements),
   // VNode: button
-  (0, _virtualDom.h)('button.clear-completed', {
-    style: (0, _helper.display)(todos.length - remaining),
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('button.clear-completed', {
+    style: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helper__["b" /* display */])(todos.length - remaining),
     onclick: function onclick() {
       todos.forEach(function (todo, index) {
-        if (todo.completed) {
-          todos.splice(index, 1);
-        }
+        if (todo.completed) todos.splice(index, 1);
       });
     }
   }, ['Clear completed'])]);
@@ -766,19 +733,15 @@ exports.default = function (state) {
 
 /***/ }),
 /* 22 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _virtualDom = __webpack_require__(1);
-
-exports.default = function (state) {
-  return (0, _virtualDom.h)('header', {}, [(0, _virtualDom.h)('h1', {}, 'todos'), (0, _virtualDom.h)('input.new-todo', {
+/* harmony default export */ __webpack_exports__["a"] = function (state) {
+  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('header', {}, [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('h1', {}, 'todos'), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.new-todo', {
     type: 'text',
     autofocus: 'autofocus',
     autocomplete: false,
@@ -803,23 +766,19 @@ exports.default = function (state) {
 
 /***/ }),
 /* 23 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__helper__ = __webpack_require__(8);
 
 
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
 
-var _virtualDom = __webpack_require__(1);
-
-var _helper = __webpack_require__(8);
-
-exports.default = function (state) {
+/* harmony default export */ __webpack_exports__["a"] = function (state) {
   // is an array
   // based on the hash
-  var todos = (0, _helper.filterTodos)(state);
+  var todos = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helper__["c" /* filterTodos */])(state);
 
   // 完成编辑
   var done = function done(todo) {
@@ -838,29 +797,29 @@ exports.default = function (state) {
   };
   // VNode: todo list
   var elements = todos.map(function (todo, index) {
-    return (0, _virtualDom.h)('li.todo', { className: (todo.completed ? ' completed' : '') + (state.editedTodo == todo ? ' editing' : '') }, [
+    return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('li.todo', { className: (todo.completed ? ' completed' : '') + (state.editedTodo == todo ? ' editing' : '') }, [
     // VNode: input[text]
-    (0, _virtualDom.h)('.view', [(0, _virtualDom.h)('input.toggle', {
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('.view', [__webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.toggle', {
       type: 'checkbox',
       checked: todo.completed,
       onclick: function onclick(event) {
         todo.completed = event.target.checked;
       }
-    }), (0, _virtualDom.h)('label', {
+    }), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('label', {
       // 双击编辑，并获取焦点
       ondblclick: function ondblclick(event) {
         state.beforeEditCache = todo.title;
         state.editedTodo = todo;
         event.target.parentNode.nextElementSibling.focus();
       }
-    }, [todo.title]), (0, _virtualDom.h)('button.destroy', {
+    }, [todo.title]), __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('button.destroy', {
       // 移除 todo
       onclick: function onclick() {
         todos.splice(index, 1);
       }
     })]),
     // VNode: input.done
-    (0, _virtualDom.h)('input.edit', {
+    __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.edit', {
       type: 'text',
       value: todo.title,
       oninput: function oninput(event) {
@@ -875,9 +834,9 @@ exports.default = function (state) {
     })]);
   });
 
-  return (0, _virtualDom.h)('section.main', { style: (0, _helper.display)(todos.length) }, [
+  return __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('section.main', { style: __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__helper__["b" /* display */])(todos.length) }, [
   // VNode: toggle-all
-  (0, _virtualDom.h)('input.toggle-all', {
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('input.toggle-all', {
     type: 'checkbox',
     onclick: function onclick(event) {
       todos.forEach(function (todo) {
@@ -886,7 +845,7 @@ exports.default = function (state) {
     }
   }),
   // VNode: todo-list
-  (0, _virtualDom.h)('ul.todo-list', {}, elements)]);
+  __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["h"])('ul.todo-list', {}, elements)]);
 };
 
 /***/ }),
@@ -2243,59 +2202,49 @@ function appendPatch(apply, patch) {
 
 /***/ }),
 /* 43 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_virtual_dom___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__observer__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__render__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__storage__ = __webpack_require__(20);
+// virtual-dom
 
-
-var _virtualDom = __webpack_require__(1);
-
-var _observer = __webpack_require__(18);
-
-var _observer2 = _interopRequireDefault(_observer);
-
-var _render = __webpack_require__(19);
-
-var _render2 = _interopRequireDefault(_render);
-
-var _storage = __webpack_require__(20);
-
-var _storage2 = _interopRequireDefault(_storage);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// 数据状态 (Model)
+// ES6 Proxy 实现 Observer
 
 // VNode (View)
-// virtual-dom
+
+// localStorage
+
+
+// 数据状态 (Model)
 var data = {
   newTodo: '',
-  todos: _storage2.default.fetch(),
+  todos: __WEBPACK_IMPORTED_MODULE_3__storage__["a" /* default */].fetch(),
   editedTodo: null,
   visibility: 'all'
 };
 
 // 监听数据变动
-
-// localStorage
-
-// ES6 Proxy 实现 Observer
-var state = (0, _observer2.default)({
+var state = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_1__observer__["a" /* default */])({
   target: data,
   listener: function listener(state) {
-    var newTree = (0, _render2.default)(state);
-    var patches = (0, _virtualDom.diff)(tree, newTree);
+    var newTree = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__render__["a" /* default */])(state);
+    var patches = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["diff"])(tree, newTree);
 
     tree = newTree;
-    rootNode = (0, _virtualDom.patch)(rootNode, patches);
+    rootNode = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["patch"])(rootNode, patches);
 
     // watch todos change for localStorage persistence
-    _storage2.default.save(state.todos);
+    __WEBPACK_IMPORTED_MODULE_3__storage__["a" /* default */].save(state.todos);
   }
 });
 
-var tree = (0, _render2.default)(state);
-var rootNode = (0, _virtualDom.create)(tree);
+var tree = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2__render__["a" /* default */])(state);
+var rootNode = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0_virtual_dom__["create"])(tree);
 
 // mount
 document.querySelector('#app').appendChild(rootNode);
