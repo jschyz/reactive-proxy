@@ -32,9 +32,10 @@ const state = observer({
 
 let tree = render(state)
 let rootNode = create(tree)
-window.state = state
+
 // mount
 document.querySelector('#app').appendChild(rootNode)
+window.app = state
 
 // hash 路由设置
 window.addEventListener('hashchange', () => {
