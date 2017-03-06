@@ -1,41 +1,20 @@
-/**
- * Define a reactive property on an Object
- */
+ /**
+  * @name Observer
+  * @description Define a reactive property on an Object
+  * @type {Object}
+  */
 export default ({target, listener}) => {
   var uid = 0
   var cache = {}
+  var observable
 
-  const handler = {
-    get (target, key, receiver) {
-      var value = Reflect.get(target, key, receiver)
-
-      // 通过判断__esProxy__，防止重复对数据Observe
-      if ((Array.isArray(value) || Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value))) {
-        let _uid = value['__esProxy__']
-        let _cache
-
-        if (!_uid) {
-          _cache = Observe(value)
-          cache[_cache['__esProxy__']] = _cache
-        } else {
-          _cache = cache[_uid]
-        }
-        return _cache
-      }
-
-      return value
-    },
-    set (target, key, value, receiver) {
-      Reflect.set(target, key, value, receiver)
-      listener(observable)
-      return true
-    }
-  }
-
-  const observable = Observe(target)
-
+  /**
+   * @name Observe
+   * @description 深度的Proxy模式
+   * @type {Object}
+   */
   function Observe (target) {
-    // __esProxy__ 不可枚举，代理缓存
+    // __esProxy__ 不可枚举，用于代理缓存指针
     Object.defineProperty(target, '__esProxy__', {
       value: ++uid,
       enumerable: false,
@@ -46,5 +25,37 @@ export default ({target, listener}) => {
     return proxy
   }
 
-  return observable
+  const handler = {
+    get (target, key, receiver) {
+      var value = Reflect.get(target, key, receiver)
+
+      // 通过判断__esProxy__，防止重复对数据Observe
+      if (Array.isArray(value) || (Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value))) {
+        let _uid
+        let _cache
+
+        // new Proxy 缓存设置
+        _uid = value['__esProxy__']
+
+        if (_uid) {
+          _cache = cache[_uid]
+        } else {
+          _cache = Observe(value)
+          cache[_cache['__esProxy__']] = _cache
+        }
+
+        return _cache
+      }
+
+      return value
+    },
+    set (target, key, value, receiver) {
+      Reflect.set(target, key, value, receiver)
+      // 触发监听
+      listener(observable)
+      return true
+    }
+  }
+
+  return (observable = Observe(target))
 }
