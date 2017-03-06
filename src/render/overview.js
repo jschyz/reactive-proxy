@@ -29,7 +29,11 @@ export default (state) => {
     // VNode: button
     h('button.clear-completed', {
       style: display(todos.length - remaining),
-      onclick () {}
+      onclick () {
+        todos.forEach((todo, index) => {
+          if (todo.completed) todos.splice(index, 1)
+        })
+      }
     }, ['Clear completed'])
   ])
 }
