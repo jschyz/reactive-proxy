@@ -1,6 +1,12 @@
 import { h } from 'virtual-dom'
 import { filters, display } from './helper'
 
+/**
+ * @name overview
+ * @description UI Component: todo 概览
+ * @action 任务筛选 清除已完成任务
+ * @type {Function}
+ */
 export default (state) => {
   let todos = state.todos
   // computed: 为选中个数
