@@ -37,4 +37,14 @@ yarn
 npm run start
 ```
 
+可以在 console 下运行
+```javascript
+// add todo
+app.todos.push({ title: 'Hello ES Proxy', completed: false })
+// modify the todo complete
+app.todos[0].completed = true
+// remove todo
+app.todos.splice(0, 1)
+```
+
 ![for example](https://cloud.githubusercontent.com/assets/3281438/23602334/0627dea0-028b-11e7-8b54-98cb2a77d24c.jpg)
