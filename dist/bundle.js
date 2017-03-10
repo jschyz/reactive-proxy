@@ -614,8 +614,6 @@ module.exports = g;
   var target = _ref.target,
       listener = _ref.listener;
 
-  var uid = 0;
-  var cache = {};
   var observable;
 
   /**
@@ -624,14 +622,14 @@ module.exports = g;
    * @type {Object}
    */
   function Observe(target) {
+    var proxy = new Proxy(target, handler);
     // __esProxy__ 不可枚举，用于代理缓存指针
     Object.defineProperty(target, '__esProxy__', {
-      value: ++uid,
+      value: proxy,
       enumerable: false,
       writable: false,
       configurable: true
     });
-    var proxy = new Proxy(target, handler);
     return proxy;
   }
 
@@ -640,21 +638,13 @@ module.exports = g;
       var value = Reflect.get(target, key, receiver);
 
       // 通过判断__esProxy__，防止重复对数据Observe
+      if (key === '__esProxy__') return value;
       if (Array.isArray(value) || Object.prototype.toString.call(value) === '[object Object]' && Object.isExtensible(value)) {
-        var _uid = void 0;
-        var _cache = void 0;
-
-        // new Proxy 缓存设置
-        _uid = value['__esProxy__'];
-
-        if (_uid) {
-          _cache = cache[_uid];
+        if (value.hasOwnProperty('__esProxy__')) {
+          return value['__esProxy__'];
         } else {
-          _cache = Observe(value);
-          cache[_cache['__esProxy__']] = _cache;
+          return Observe(value);
         }
-
-        return _cache;
       }
 
       return value;
