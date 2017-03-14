@@ -47,4 +47,6 @@ app.todos[0].completed = true
 app.todos.splice(0, 1)
 ```
 
+[live example](https://jschyz.github.io/reactive-proxy/)
+
 ![for example](https://cloud.githubusercontent.com/assets/3281438/23602334/0627dea0-028b-11e7-8b54-98cb2a77d24c.jpg)
